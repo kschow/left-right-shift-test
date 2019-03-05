@@ -10,4 +10,4 @@ This application was written for curiosity reasons and to make a silly toy app w
 
 Currently it only has one canned passage to test on taken from Fighting the Flames by R.M. Ballantyne courtesy of [Project Gutenberg](https://www.gutenberg.org/).
 
-If you want to take the test go [here](https://kschow.github.io/left-right-shift-test/index.html).
+If you want to take the test go [here](https://kschow.github.io/left-right-shift-test/).
