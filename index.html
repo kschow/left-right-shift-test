@@ -1,0 +1,144 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<div id="app">
+	<h2>Welcome to the Left/Right shift typing test</h2>
+	<div v-if="state === 0" id="startup">
+		<div class="text info passage">
+			<p>This is a simple typing test that does a few very simple things:</p>
+			<ol>
+				<li>Tracks how many times you use the left shift key vs. the right shift key.</li>
+				<li>Tracks how many times you use the backspace key.</li>
+				<li>How correctly you type. (pending)</li>
+			</ol> 
+			<p>Like most typing tests, you'll get a passage of text to type and a text box to type in. When done, click the "Finish Typing" button to see your results.</p>
+		</div>
+		<button @click="start">Get started</button>
+	</div>
+	<div v-else-if="state === 1" id="test">
+		<div class="text type passage">
+			<span v-html="rawHtmlText"></span>
+		</div>
+		<textarea v-on:keyup="trackKeyUps" v-model="userInput" placeholder="Start typing here..." rows="8" cols="80" class="text"></textarea>
+		</br>
+		<button @click="finish">Finish Typing</button>
+	</div>
+	<div v-else id="results">
+		<div class="text type passage">
+			<h4>Expected:</h4>
+			<ul>
+				<li>Number of times left shift was used: {{expectedLeftShifts}}</li>
+				<li>Number of times right shift was used: {{expectedRightShifts}}</li>
+				<li>Number of times any shift was used: {{expectedTotalShifts}}
+				<li>Number of times backspace was used:
+				0</li>
+			</ul>
+			<h4>Results:</h4>
+			<ul>
+				<li>Number of times left shift was used: {{leftShift}}</li>
+				<li>Number of times right shift was used: {{rightShift}}</li>
+				<li>Number of times any shift was used: {{totalShifts}}
+				<li>Number of times backspace was used:
+				{{backspace}}</li>
+			</ul>
+		</div>
+		<button @click="restart">Restart Test?</button>
+	</div>
+</div>
+
+
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: {
+			state: 0,
+			text: '"There, just at your feet; don\'t be so nervous, girl!" cried Mrs Rose.\nMatty, in her anxiety not to drop the match, at once dropped it into the waste-paper basket, which was instantly alight. A stamp of the foot might have extinguished it, but this did not occur to either of the domestics. The housekeeper, who was a courageous woman, seized the basket in both hands and rushed with it to the fireplace, thereby fanning the flame into a blaze and endangering her dress and curls. She succeeded, however, in cramming the basket and its contents into the grate; then the two, with the aid of poker, tongs, and shovel, crushed and beat out the fire.\n"There! I said you\'d do it," gasped Mrs Rose, as she flung herself, panting, into Mr Auberly\'s easy-chair; "this comes of bein\' in a hurry."',
+			rawHtmlText: '<p>"There, just at your feet; don\'t be so nervous, girl!" cried Mrs Rose.</p><p>Matty, in her anxiety not to drop the match, at once dropped it into the waste-paper basket, which was instantly alight. A stamp of the foot might have extinguished it, but this did not occur to either of the domestics. The housekeeper, who was a courageous woman, seized the basket in both hands and rushed with it to the fireplace, thereby fanning the flame into a blaze and endangering her dress and curls. She succeeded, however, in cramming the basket and its contents into the grate; then the two, with the aid of poker, tongs, and shovel, crushed and beat out the fire.</p><p>"There! I said you\'d do it," gasped Mrs Rose, as she flung herself, panting, into Mr Auberly\'s easy-chair; "this comes of bein\' in a hurry."</p>',
+			userInput: '',
+			leftShift: 0,
+			rightShift: 0,
+			otherShift: 0,
+			backspace: 0,
+			expectedLeftShifts: 11,
+			expectedRightShifts: 9,
+			expectedTotalShifts: 20
+		},
+		methods: {
+			trackKeyUps: function(e) {
+				if (e.key === 'Shift') {
+					if (e.location == 1) {
+						this.leftShift++
+					} else if (e.location == 2) {
+						this.rightShift++
+					} else {
+						this.otherShift++
+					}
+				} else if (e.key === 'Backspace') {
+					this.backspace++
+				}
+			},
+			start: function() {
+				this.state++
+			},
+			finish: function() {
+				this.state++
+			},
+			restart: function() {
+				this.leftShift = 0
+				this.rightShift = 0
+				this.otherShift = 0
+				this.backspace = 0
+				this.userInput = ''
+				this.state--
+
+			}
+		},
+		computed: {
+			totalShifts: function() {
+				return this.leftShift + this.rightShift + this.otherShift
+			}
+		}
+	})
+</script>
+
+<style>
+	body {
+		text-align: center;
+		background-color: #dfdfdf;
+		padding: 1em;
+	}
+
+	.passage {
+		max-width: 65em;
+		margin: auto;
+	}
+
+	.type {
+		text-align: left;
+	}
+
+	.text {
+		background-color: #efefef;
+		border-radius: 2px;
+		border-color: #333;
+		border: 1px solid;
+		padding: 1em;
+	}
+
+	ol {
+		max-width: 30em;
+		margin: auto;
+	}
+
+	li {
+		text-align: left;
+	}
+
+	textarea {
+		resize: none;
+		margin-top: 1.25em;
+	}
+
+	button {
+		margin-top: 1em;
+	}
+</style>
