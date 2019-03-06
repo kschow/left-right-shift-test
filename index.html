@@ -5,7 +5,7 @@
 	<div id="app">
 		<h2>Welcome to the Left/Right shift typing test</h2>
 		<div v-if="state === 0" id="startup">
-			<div class="text info passage">
+			<div class="text passage">
 				<p>This is a simple typing test that does a few very simple things:</p>
 				<ol>
 					<li>Tracks how many times you use the left shift key vs. the right shift key.</li>
@@ -43,10 +43,10 @@
 					{{backspace}}</li>
 				</ul>
 			</div>
-			<button @click="restart">Restart Test?</button>
+			<button @click="restart">Restart Test?</button>&nbsp;
+			<a href="#" @click="backToBegin">Go Back to the Beginning</button>
 		</div>
 	</div>
-
 
 	<script>
 		var vm = new Vue({
@@ -92,6 +92,9 @@
 					this.userInput = ''
 					this.state--
 
+				},
+				backToBegin: function() {
+					this.state = 0
 				}
 			},
 			computed: {
