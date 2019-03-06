@@ -10,7 +10,7 @@
 				<ol>
 					<li>Tracks how many times you use the left shift key vs. the right shift key.</li>
 					<li>Tracks how many times you use the backspace key.</li>
-					<li>How correctly you type. (pending)</li>
+					<li>How correctly you type.</li>
 				</ol> 
 				<p>Like most typing tests, you'll get a passage of text to type and a text box to type in. When done, click the "Finish Typing" button to see your results.</p>
 			</div>
@@ -31,16 +31,16 @@
 					<li>Number of times left shift was used: {{expectedLeftShifts}}</li>
 					<li>Number of times right shift was used: {{expectedRightShifts}}</li>
 					<li>Number of times any shift was used: {{expectedTotalShifts}}
-					<li>Number of times backspace was used:
-					0</li>
+					<li>Number of times backspace was used: 0</li>
+					<li>Number of differences: 0</li>
 				</ul>
 				<h4>Results:</h4>
 				<ul>
 					<li>Number of times left shift was used: {{leftShift}}</li>
 					<li>Number of times right shift was used: {{rightShift}}</li>
 					<li>Number of times any shift was used: {{totalShifts}}
-					<li>Number of times backspace was used:
-					{{backspace}}</li>
+					<li>Number of times backspace was used:	{{backspace}}</li>
+					<li>Number of differences (simple and inaccurate): {{differences}}
 				</ul>
 			</div>
 			<button @click="restart">Restart Test?</button>&nbsp;
@@ -49,6 +49,20 @@
 	</div>
 
 	<script>
+		var flattenText = function(text) {
+			return text.match(/[^!\.]+[!\."]+|(\s+)/g).map(s => s.trim()).reduce((a,b) => a + ' ' + b)
+		}
+
+		var simpleDiff = function(expected, actual) {
+			var testLength = Math.min(expected.length, actual.length)
+			var diffCount = Math.abs(expected.length - actual.length)
+			for (var i = 0; i < testLength; i++) {
+				if (expected.charAt(i) !== actual.charAt(i))
+					diffCount++;
+			}
+			return diffCount
+		}
+
 		var vm = new Vue({
 			el: '#app',
 			data: {
@@ -91,7 +105,6 @@
 					this.backspace = 0
 					this.userInput = ''
 					this.state--
-
 				},
 				backToBegin: function() {
 					this.state = 0
@@ -100,6 +113,15 @@
 			computed: {
 				totalShifts: function() {
 					return this.leftShift + this.rightShift + this.otherShift
+				},
+				flatText: function() {
+					return flattenText(this.text)
+				},
+				flatInput: function() {
+					return flattenText(this.userInput)
+				},
+				differences: function() {
+					return simpleDiff(this.flatText, this.flatInput)
 				}
 			}
 		})
