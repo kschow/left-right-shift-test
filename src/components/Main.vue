@@ -36,15 +36,11 @@
     import Info from './Info'
     import Test from './Test'
     import Results from './Results'
+    import { flattenText,
+        leftShiftsNumber,
+        rightShiftsNumber } from '../utility'
 
     let diff = require('diff')
-    let flattenText = function(text) {
-        let matches = text.match(/[^!.]+[!."]+|(\s+)/g)
-        if (matches === null)
-            return text
-
-        return matches.map(s => s.trim()).reduce((a,b) => a + ' ' + b)
-    }
 
     export default {
         name: "Main",
@@ -63,8 +59,6 @@
                 rightShifts: 0,
                 otherShifts: 0,
                 backspaces: 0,
-                expectedLeftShifts: 11,
-                expectedRightShifts: 9
             }
         },
         methods: {
@@ -103,6 +97,12 @@
         computed: {
             totalShifts: function() {
                 return this.leftShifts + this.rightShifts + this.otherShifts
+            },
+            expectedLeftShifts: function() {
+                return leftShiftsNumber(this.text)
+            },
+            expectedRightShifts: function() {
+                return rightShiftsNumber(this.text)
             },
             expectedTotalShifts: function() {
                 return this.expectedLeftShifts + this.expectedRightShifts
