@@ -8,7 +8,8 @@
             v-on:keyup="$emit('trackKeyup', $event)"
             v-on:input="$emit('input', $event.target.value)"
             placeholder="Start typing here..."
-            rows="8" cols="80" class="text"></textarea>
+            rows="8" cols="80" class="text"
+            spellcheck="false"></textarea>
         <button @click="$emit('finish')">
             Finish Typing
         </button>
