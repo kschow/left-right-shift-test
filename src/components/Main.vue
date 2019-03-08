@@ -38,9 +38,25 @@
     import Results from './Results'
     import { flattenText,
         leftShiftsNumber,
-        rightShiftsNumber } from '../utility'
+        rightShiftsNumber,
+        breakText,
+        italicizeText
+    } from '../utility/utility'
+    import { fightingTheFlames } from '../utility/fighting-the-flames'
 
     let diff = require('diff')
+    let totalText = breakText(fightingTheFlames)
+
+    function getText() {
+        let index = Math.floor(Math.random() * totalText.length)
+
+        let text = ''
+        while (text.length < 500 && index < totalText.length) {
+            text += (totalText[index++] + '\n')
+        }
+
+        return text
+    }
 
     export default {
         name: "Main",
@@ -52,8 +68,7 @@
         data: function () {
             return {
                 state: 0,
-                text: '"There, just at your feet; don\'t be so nervous, girl!" cried Mrs Rose.\nMatty, in her anxiety not to drop the match, at once dropped it into the waste-paper basket, which was instantly alight. A stamp of the foot might have extinguished it, but this did not occur to either of the domestics. The housekeeper, who was a courageous woman, seized the basket in both hands and rushed with it to the fireplace, thereby fanning the flame into a blaze and endangering her dress and curls. She succeeded, however, in cramming the basket and its contents into the grate; then the two, with the aid of poker, tongs, and shovel, crushed and beat out the fire.\n"There! I said you\'d do it," gasped Mrs Rose, as she flung herself, panting, into Mr Auberly\'s easy-chair; "this comes of bein\' in a hurry."',
-                rawHtmlText: '<p>"There, just at your feet; don\'t be so nervous, girl!" cried Mrs Rose.</p><p>Matty, in her anxiety not to drop the match, at once dropped it into the waste-paper basket, which was instantly alight. A stamp of the foot might have extinguished it, but this did not occur to either of the domestics. The housekeeper, who was a courageous woman, seized the basket in both hands and rushed with it to the fireplace, thereby fanning the flame into a blaze and endangering her dress and curls. She succeeded, however, in cramming the basket and its contents into the grate; then the two, with the aid of poker, tongs, and shovel, crushed and beat out the fire.</p><p>"There! I said you\'d do it," gasped Mrs Rose, as she flung herself, panting, into Mr Auberly\'s easy-chair; "this comes of bein\' in a hurry."</p>',
+                text: getText(),
                 userInput: '',
                 leftShifts: 0,
                 rightShifts: 0,
@@ -74,6 +89,7 @@
                 this.otherShifts = 0
                 this.backspaces = 0
                 this.userInput = ''
+                this.text = getText()
                 this.state--
             },
             backToBegin: function() {
@@ -115,6 +131,9 @@
             },
             differences: function() {
                 return diff.diffWords(this.flatText, this.flatInput)
+            },
+            rawHtmlText: function() {
+                return italicizeText(this.text)
             }
         }
     }
