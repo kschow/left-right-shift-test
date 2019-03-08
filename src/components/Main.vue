@@ -40,6 +40,7 @@
         leftShiftsNumber,
         rightShiftsNumber,
         breakText,
+        cleanText,
         italicizeText
     } from '../utility/utility'
     import { fightingTheFlames } from '../utility/fighting-the-flames'
@@ -51,8 +52,12 @@
         let index = Math.floor(Math.random() * totalText.length)
 
         let text = ''
-        while (text.length < 500 && index < totalText.length) {
+        while (text.length < 750 && index < totalText.length) {
             text += (totalText[index++] + '\n')
+        }
+
+        if (leftShiftsNumber(text) + rightShiftsNumber(text) < 20) {
+            text = getText()
         }
 
         return text
@@ -115,10 +120,10 @@
                 return this.leftShifts + this.rightShifts + this.otherShifts
             },
             expectedLeftShifts: function() {
-                return leftShiftsNumber(this.text)
+                return leftShiftsNumber(cleanText(this.text))
             },
             expectedRightShifts: function() {
-                return rightShiftsNumber(this.text)
+                return rightShiftsNumber(cleanText(this.text))
             },
             expectedTotalShifts: function() {
                 return this.expectedLeftShifts + this.expectedRightShifts
